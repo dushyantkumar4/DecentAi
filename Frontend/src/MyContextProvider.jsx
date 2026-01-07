@@ -2,23 +2,25 @@ import { useState } from "react";
 import { v1 as uuidv1 } from "uuid";
 import { MyContaxt } from "./MyContaxt";
 
-
-
 const MyContextProvider = ({ children }) => {
-  const [prop,setProp] = useState("");
-  const [reply,setReply] = useState(null);
-  const [currThreadId,setCurrThreadId] = useState(uuidv1())
+  const [prompt, setPrompt] = useState("");
+  const [reply, setReply] = useState(null);
+  const [currThreadId, setCurrThreadId] = useState(uuidv1());
+  const [prevChat, setPrevChat] = useState([]);
+  const [newChat, setNewChat] = useState(true);
+  const [allThreads,setAllThreads] = useState([]);
 
   const providerValues = {
-   prop ,setProp,
-   reply,setReply,
-    currThreadId
+    prompt, setPrompt,
+    reply,setReply,
+    currThreadId,setCurrThreadId,
+    prevChat,setPrevChat,
+    newChat,setNewChat,
+    allThreads,setAllThreads
   };
 
   return (
-    <MyContaxt.Provider value={providerValues}>
-      {children}
-    </MyContaxt.Provider>
+    <MyContaxt.Provider value={providerValues}>{children}</MyContaxt.Provider>
   );
 };
 

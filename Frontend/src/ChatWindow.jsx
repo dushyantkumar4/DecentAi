@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "./components/Navbar.jsx";
 import Chat from "./components/Chat.jsx";
@@ -7,38 +7,65 @@ import { ScaleLoader } from "react-spinners";
 
 const ChatWindow = () => {
   const [loading, setLoading] = useState(false);
-  const { prop, setProp, reply, setReply, currThreadId } =
-    useContext(MyContaxt);
+  const {
+    prompt,
+    setPrompt,
+    reply,
+    setReply,
+    currThreadId,
+    setPrevChat,
+    setNewChat,
+  } = useContext(MyContaxt);
 
   const getReply = async () => {
-    if (!prop.trim()) return;
+    if (!prompt.trim()) return;
     setLoading(true);
+    setNewChat(false);
 
     try {
       const res = await axios({
         url: "http://localhost:3000/api/chat",
         method: "POST",
         data: {
-          message: prop,
+          message: prompt,
           threadId: currThreadId,
         },
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log(res);
-      setReply(res.reply);
+      console.log(res.data);
+      setReply(res.data);
     } catch (err) {
       console.log(err);
     }
     setLoading(false);
   };
 
+  // append new chats to prevChats
+  useEffect(() => {
+    if (prompt && reply) {
+      setPrevChat((prevChat) => [
+        ...prevChat,
+        {
+          role: "user",
+          content: prompt,
+        },
+        {
+          role: "assistant",
+          content: reply,
+        },
+      ]);
+    }
+    setPrompt("");
+  }, [reply]);
+
   return (
-    <div className="w-full flex flex-col justify-between">
-      <div className="">
-        <Navbar />
-        <div className="flex flex-col items-center">
+    <div className="w-full h-screen flex flex-col gap-4">
+      <Navbar />
+
+      <div className="w-full flex-1 flex justify-center overflow-hidden">
+        <div className="flex-1 flex flex-col max-w-200 w-full overflow-y-auto">
           <Chat />
           <ScaleLoader color="#9810fa" loading={loading}></ScaleLoader>
         </div>
@@ -49,15 +76,15 @@ const ChatWindow = () => {
             type="text"
             placeholder="Ask anything"
             className="w-full outline-none p-5 text-white"
-            value={prop}
+            value={prompt}
             onChange={(e) => {
-              setProp(e.target.value);
+              setPrompt(e.target.value);
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && prop.trim()) {
+              if (e.key === "Enter" && prompt.trim()) {
                 e.preventDefault();
                 getReply();
-                setProp("");
+                setPrompt("");
               }
             }}
           />
@@ -66,7 +93,7 @@ const ChatWindow = () => {
             className=""
             onClick={() => {
               getReply();
-              setProp("");
+              setPrompt("");
             }}
           >
             <i
