@@ -5,12 +5,8 @@ import ChatWindow from "./ChatWindow.jsx";
 
 const Layout = () => {
   return (
-    <div className="w-full">
-      <div className="flex gap-5 w-full">
-        <Sidebar className=""/>
-        <ChatWindow className=""/>
-      </div>
-
+    <div className="flex gap-5 w-full">
+      <Sidebar className="" />
       <Outlet />
     </div>
   );

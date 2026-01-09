@@ -19,6 +19,7 @@ const ChatWindow = () => {
 
   const getReply = async () => {
     if (!prompt.trim()) return;
+
     setLoading(true);
     setNewChat(false);
 
@@ -35,28 +36,36 @@ const ChatWindow = () => {
         },
       });
       console.log(res.data);
-      setReply(res.data);
+      setReply({
+        user: prompt,
+        assistant: res.data.reply,
+      });
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // append new chats to prevChats
   useEffect(() => {
-    if (prompt && reply) {
-      setPrevChat((prevChat) => [
-        ...prevChat,
-        {
-          role: "user",
-          content: prompt,
-        },
-        {
-          role: "assistant",
-          content: reply,
-        },
-      ]);
-    }
+    if (!reply) return;
+
+    // if (prompt && reply) {}
+
+    setPrevChat((prevChat) => [
+      ...prevChat,
+      {
+        role: "user",
+        content: prompt,
+      },
+      {
+        role: "assistant",
+        content: reply,
+      },
+    ]);
+    console.log(reply);
+
     setPrompt("");
   }, [reply]);
 
@@ -67,10 +76,12 @@ const ChatWindow = () => {
       <div className="w-full flex-1 flex justify-center overflow-hidden">
         <div className="flex-1 flex flex-col max-w-200 w-full overflow-y-auto">
           <Chat />
-          <ScaleLoader color="#9810fa" loading={loading}></ScaleLoader>
+          <div className="place-self-center mb-20">
+            <ScaleLoader color="#9810fa" loading={loading}></ScaleLoader>
+          </div>
         </div>
       </div>
-      <div className="flex flex-col items-center gap-0.5">
+      <div className="flex flex-col items-center gap-0.5 mx-1">
         <div className="flex justify-between items-center w-full rounded-2xl pr-6 max-w-200 shadow-md hover:shadow-purple-600 bg-[rgb(255,255,255,0.05)]">
           <input
             type="text"
@@ -84,16 +95,14 @@ const ChatWindow = () => {
               if (e.key === "Enter" && prompt.trim()) {
                 e.preventDefault();
                 getReply();
-                setPrompt("");
               }
             }}
           />
           <button
-            id="submit "
+            id="submit"
             className=""
             onClick={() => {
               getReply();
-              setPrompt("");
             }}
           >
             <i

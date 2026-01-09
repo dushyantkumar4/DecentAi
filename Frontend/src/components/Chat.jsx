@@ -3,6 +3,7 @@ import { MyContaxt } from "../MyContaxt.jsx";
 
 const Chat = () => {
   const { newChat, prevChat } = useContext(MyContaxt);
+  console.log(prevChat);
   return (
     <div className="w-full flex-1">
       {newChat && (
