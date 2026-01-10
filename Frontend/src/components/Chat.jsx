@@ -1,13 +1,33 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MyContaxt } from "../MyContaxt.jsx";
 import rehypeHighlight from "rehype-highlight";
 import Markdown from "react-markdown";
 import "highlight.js/styles/github-dark.css";
 
-
 const Chat = () => {
-  const { newChat, prevChat } = useContext(MyContaxt);
-  console.log(prevChat);
+  const { newChat, prevChat, reply } = useContext(MyContaxt);
+  const [latestReply, setLatestReply] = useState(null);
+
+  useEffect(() => {
+    console.log(reply);
+    if (reply === null) {
+      setLatestReply(null); //prevchat load
+      return;
+    }
+    if (!prevChat?.length) return;
+
+    const content = reply.assistant.split(" "); //individual work
+
+    let idx = 0;
+    const interval = setInterval(() => {
+      setLatestReply(content.slice(0, idx + 1).join(" "));
+      idx++;
+      if (idx >= content.length) clearInterval(interval);
+    }, 40);
+
+    return () => clearInterval(interval);
+  }, [prevChat, reply]);
+
   return (
     <div className="w-full flex-1">
       {newChat && (
@@ -17,7 +37,7 @@ const Chat = () => {
       )}
       {/* chats */}
       <div className="p-10">
-        {prevChat?.map((chat, idx) => (
+        {prevChat?.slice(0, -1).map((chat, idx) => (
           <div
             key={idx}
             className={` text-[0.9rem] ${
@@ -27,13 +47,11 @@ const Chat = () => {
             }`}
           >
             {chat.role === "user" ? (
-              <div className="bg-[#323232] py-2.5 px-5 rounded-xl max-w-120 w-fit mb-5">
-                <Markdown rehypePlugins={[rehypeHighlight]}>
-                  {chat.content}
-                </Markdown>
-              </div>
+              <p className="bg-[#323232] py-2.5 px-5 rounded-xl max-w-120 w-fit mb-5">
+                {chat.content}
+              </p>
             ) : (
-              <div className="bg-[#171717] py-2.5 px-5 rounded-xl w-fit mb-5">
+              <div className=" mb-5">
                 <Markdown rehypePlugins={[rehypeHighlight]}>
                   {chat.content}
                 </Markdown>
@@ -41,6 +59,12 @@ const Chat = () => {
             )}
           </div>
         ))}
+
+        {prevChat.length > 0 && latestReply !== null && (
+          <div className="text-[0.9rem] text-left" key={"typing"}>
+            <Markdown rehypePlugins={[rehypeHighlight]}>{latestReply}</Markdown>
+          </div>
+        )}
       </div>
     </div>
   );
