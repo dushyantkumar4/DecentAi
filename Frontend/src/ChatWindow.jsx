@@ -57,11 +57,11 @@ const ChatWindow = () => {
       ...prevChat,
       {
         role: "user",
-        content: prompt,
+        content: reply.user,
       },
       {
         role: "assistant",
-        content: reply,
+        content: reply.assistant,
       },
     ]);
     console.log(reply);

@@ -3,7 +3,7 @@ import img from "../../public/logo.png";
 
 const Sidebar = () => {
   return (
-    <section className=" md:flex flex-col w-70 h-screen justify-between  bg-[#171717] text-[#b4b4b4] hidden ">
+    <section className=" md:flex flex-col w-80 h-screen justify-between  bg-[#171717] text-[#b4b4b4] hidden ">
       <div className="flex flex-col justify-around w-full">
         {/* header  */}
         <button className="flex items-center justify-between px-2 py-1.5 m-2 border border-[rgba(255,255,255,0.5)] bg-transparent rounded-[5px] hover:bg-[rgb(180,180,180,0.05)] cursor-pointer">

@@ -1,5 +1,9 @@
 import { useContext } from "react";
 import { MyContaxt } from "../MyContaxt.jsx";
+import rehypeHighlight from "rehype-highlight";
+import Markdown from "react-markdown";
+import "highlight.js/styles/github-dark.css";
+
 
 const Chat = () => {
   const { newChat, prevChat } = useContext(MyContaxt);
@@ -16,16 +20,24 @@ const Chat = () => {
         {prevChat?.map((chat, idx) => (
           <div
             key={idx}
-            className={`text-[0.9rem] ${
+            className={` text-[0.9rem] ${
               chat.role === "user"
                 ? "flex justify-end text-[0.9rem]"
                 : "text-left"
             }`}
           >
             {chat.role === "user" ? (
-              <p className="bg-[#323232] py-2.5 px-5 rounded-xl max-w-120 w-fit">{chat.content}</p>
+              <div className="bg-[#323232] py-2.5 px-5 rounded-xl max-w-120 w-fit mb-5">
+                <Markdown rehypePlugins={[rehypeHighlight]}>
+                  {chat.content}
+                </Markdown>
+              </div>
             ) : (
-              <p className="">{chat.content}</p>
+              <div className="bg-[#171717] py-2.5 px-5 rounded-xl w-fit mb-5">
+                <Markdown rehypePlugins={[rehypeHighlight]}>
+                  {chat.content}
+                </Markdown>
+              </div>
             )}
           </div>
         ))}
