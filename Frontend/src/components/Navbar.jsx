@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className="flex justify-between items-center p-3 ">
+    <div className="flex justify-between items-center p-3 shadow-lg">
       <div className="hover:text-shadow-lg hover:text-shadow-purple-600 font-semibold cursor-pointer text-lg">
         DecentAi <i className="fa-solid fa-chevron-down"></i>
       </div>

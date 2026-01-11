@@ -70,7 +70,7 @@ const ChatWindow = () => {
   }, [reply]);
 
   return (
-    <div className="w-full h-screen flex flex-col gap-4">
+    <div className="w-full h-screen flex flex-col">
       <Navbar />
 
       <div className="w-full flex-1 flex justify-center overflow-hidden">
