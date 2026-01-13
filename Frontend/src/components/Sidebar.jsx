@@ -2,9 +2,19 @@ import React, { useContext, useEffect } from "react";
 import img from "../../public/logo.png";
 import { MyContaxt } from "../MyContaxt.jsx";
 import axios from "axios";
+import { v4 as uuidv1 } from "uuid";
 
 const Sidebar = () => {
-  const { allThreads, setAllThreads, currThreadId } = useContext(MyContaxt);
+  const {
+    allThreads,
+    setAllThreads,
+    currThreadId,
+    setNewChat,
+    setPrompt,
+    setReply,
+    setCurrThreadId,
+    setPrevChat
+  } = useContext(MyContaxt);
 
   const getAllThread = async () => {
     try {
@@ -19,15 +29,24 @@ const Sidebar = () => {
       console.log(err);
     }
   };
+
   useEffect(() => {
     getAllThread();
   }, [currThreadId]);
+
+  const createNewChat = () => {
+    setNewChat(true);
+    setPrompt("");
+    setReply(null);
+    setCurrThreadId(uuidv1());
+    setPrevChat([]);
+  };
 
   return (
     <section className=" md:flex flex-col w-80 h-screen! max-h-135 justify-between  bg-[#171717] text-[#b4b4b4] ">
       <div className="flex flex-col justify-between w-full h-full">
         {/* header  */}
-        <button className=" flex items-center justify-between px-2 py-1.5 m-2 border border-[rgba(255,255,255,0.5)] bg-transparent rounded-[5px] hover:bg-[rgb(180,180,180,0.05)] cursor-pointer">
+        <button onClick={createNewChat} className=" flex items-center justify-between px-2 py-1.5 m-2 border border-[rgba(255,255,255,0.5)] bg-transparent rounded-[5px] hover:bg-[rgb(180,180,180,0.05)] cursor-pointer">
           <img
             src={img}
             alt=""
@@ -47,7 +66,6 @@ const Sidebar = () => {
               >
                 {thread.title}
 
-                
                 <i className="fa-regular fa-trash-can text-purple-600 hidden opacity-0 group-hover:opacity-100 transition-all duration-200"></i>
               </li>
             ))}
