@@ -9,6 +9,7 @@ const MyContextProvider = ({ children }) => {
   const [prevChat, setPrevChat] = useState([]);
   const [newChat, setNewChat] = useState(true);
   const [allThreads,setAllThreads] = useState([]);
+  
 
   const providerValues = {
     prompt, setPrompt,
