@@ -45,7 +45,7 @@ export const getThread = async (req, res) => {
       });
     }
 
-    res.json(thread.message);
+    res.json(thread.messages);
   } catch (err) {
     console.log(err);
     res.status(500).json({

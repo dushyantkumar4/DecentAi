@@ -36,10 +36,7 @@ const ChatWindow = () => {
         },
       });
       console.log(res.data);
-      setReply({
-        user: prompt,
-        assistant: res.data.reply,
-      });
+      setReply(res.data.reply);
     } catch (err) {
       console.log(err);
     } finally {
@@ -57,11 +54,11 @@ const ChatWindow = () => {
       ...prevChat,
       {
         role: "user",
-        content: reply.user,
+        content:prompt,
       },
       {
         role: "assistant",
-        content: reply.assistant,
+        content: reply,
       },
     ]);
     console.log(reply);

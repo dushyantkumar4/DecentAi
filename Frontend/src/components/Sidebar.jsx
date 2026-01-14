@@ -13,7 +13,7 @@ const Sidebar = () => {
     setPrompt,
     setReply,
     setCurrThreadId,
-    setPrevChat
+    setPrevChat,
   } = useContext(MyContaxt);
 
   const getAllThread = async () => {
@@ -42,11 +42,48 @@ const Sidebar = () => {
     setPrevChat([]);
   };
 
+  const changeThread = async (newThreadId) => {
+    setCurrThreadId(newThreadId);
+
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/thread/${newThreadId}`
+      );
+      setPrevChat(response.data);
+      setNewChat(false);
+      setReply(null);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const deleteThread = async (threadId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/thread/${threadId}`
+      );
+      console.log(response);
+      //updating threads re-render
+      setAllThreads((prev) =>
+        prev.filter((thread) => thread.threadId !== threadId)
+      );
+      if (threadId === currThreadId) {
+        createNewChat();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <section className=" md:flex flex-col w-80 h-screen! max-h-135 justify-between  bg-[#171717] text-[#b4b4b4] ">
       <div className="flex flex-col justify-between w-full h-full">
         {/* header  */}
-        <button onClick={createNewChat} className=" flex items-center justify-between px-2 py-1.5 m-2 border border-[rgba(255,255,255,0.5)] bg-transparent rounded-[5px] hover:bg-[rgb(180,180,180,0.05)] cursor-pointer">
+        <button
+          onClick={createNewChat}
+          className=" flex items-center justify-between px-2 py-1.5 m-2 border border-[rgba(255,255,255,0.5)] bg-transparent rounded-[5px] hover:bg-[rgb(180,180,180,0.05)] cursor-pointer"
+        >
           <img
             src={img}
             alt=""
@@ -62,11 +99,17 @@ const Sidebar = () => {
             {allThreads?.map((thread) => (
               <li
                 key={thread.threadId}
-                className="group cursor-pointer p-1 mb-0.5 relative hover:bg-[rgb(180,180,180,0.05)] rounded-lg flex justify-between items-center"
+                onClick={() => {
+                  changeThread(thread.threadId);
+                }}
+                className="group cursor-pointer p-1 mb-0.5 relative hover:bg-[rgb(180,180,180,0.05)] text-white rounded-lg flex justify-between items-center"
               >
                 {thread.title}
 
-                <i className="fa-regular fa-trash-can text-purple-600 hidden opacity-0 group-hover:opacity-100 transition-all duration-200"></i>
+                <i
+                  onClick={()=>deleteThread(thread.threadId)}
+                  className="fa-regular fa-trash-can text-purple-600 hover:text-[#f87171] hidden opacity-0 group-hover:opacity-100 transition-all duration-200"
+                ></i>
               </li>
             ))}
           </ul>

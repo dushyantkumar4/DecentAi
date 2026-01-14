@@ -9,14 +9,13 @@ const Chat = () => {
   const [latestReply, setLatestReply] = useState(null);
 
   useEffect(() => {
-    console.log(reply);
     if (reply === null) {
       setLatestReply(null); //prevchat load
       return;
     }
     if (!prevChat?.length) return;
 
-    const content = reply.assistant.split(" "); //individual work
+    const content = reply.split(" "); //individual work
 
     let idx = 0;
     const interval = setInterval(() => {
@@ -27,6 +26,7 @@ const Chat = () => {
 
     return () => clearInterval(interval);
   }, [prevChat, reply]);
+  const safeMarkdown = (value) => (typeof value === "string" ? value : "");
 
   return (
     <div className="w-full flex-1">
@@ -48,7 +48,7 @@ const Chat = () => {
           >
             {chat.role === "user" ? (
               <p className="bg-[#323232] py-2.5 px-5 rounded-xl max-w-120 w-fit mb-5">
-                {chat.content}
+                {safeMarkdown(chat.content)}
               </p>
             ) : (
               <div className=" mb-5">
@@ -60,9 +60,21 @@ const Chat = () => {
           </div>
         ))}
 
-        {prevChat.length > 0 && latestReply !== null && (
-          <div className="text-[0.9rem] text-left" key={"typing"}>
-            <Markdown rehypePlugins={[rehypeHighlight]}>{latestReply}</Markdown>
+        {prevChat.length > 0 && (
+          <div>
+            {latestReply === null ? (
+              <div className="text-[0.9rem] text-left" key={"non-typing"}>
+                <Markdown rehypePlugins={[rehypeHighlight]}>
+                  {safeMarkdown(prevChat[prevChat.length - 1]?.content)}
+                </Markdown>
+              </div>
+            ) : (
+              <div className="text-[0.9rem] text-left" key={"typing"}>
+                <Markdown rehypePlugins={[rehypeHighlight]}>
+                  {safeMarkdown(latestReply)}
+                </Markdown>
+              </div>
+            )}
           </div>
         )}
       </div>
