@@ -7,6 +7,7 @@ import { ScaleLoader } from "react-spinners";
 
 const ChatWindow = () => {
   const [loading, setLoading] = useState(false);
+  
   const {
     prompt,
     setPrompt,
@@ -54,7 +55,7 @@ const ChatWindow = () => {
       ...prevChat,
       {
         role: "user",
-        content:prompt,
+        content: prompt,
       },
       {
         role: "assistant",

@@ -102,7 +102,11 @@ const Sidebar = () => {
                 onClick={() => {
                   changeThread(thread.threadId);
                 }}
-                className="group cursor-pointer p-1 mb-0.5 relative hover:bg-[rgb(180,180,180,0.05)] text-white rounded-lg flex justify-between items-center"
+                className={`group cursor-pointer p-1 mb-0.5 relative hover:bg-[rgb(180,180,180,0.05)] text-white rounded-lg flex justify-between items-center ${
+                  thread.threadId === currThreadId
+                    ? "bg-[rgba(180,180,180,0.05)] rouneded-2.5"
+                    : ""
+                }`}
               >
                 {thread.title}
                 <button
