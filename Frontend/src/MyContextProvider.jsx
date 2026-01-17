@@ -9,6 +9,7 @@ const MyContextProvider = ({ children }) => {
   const [prevChat, setPrevChat] = useState([]);
   const [newChat, setNewChat] = useState(true);
   const [allThreads,setAllThreads] = useState([]);
+  const [showSidebar,setShowSidebar] = useState(true);
   
 
   const providerValues = {
@@ -17,7 +18,8 @@ const MyContextProvider = ({ children }) => {
     currThreadId,setCurrThreadId,
     prevChat,setPrevChat,
     newChat,setNewChat,
-    allThreads,setAllThreads
+    allThreads,setAllThreads,
+    showSidebar,setShowSidebar,
   };
 
   return (

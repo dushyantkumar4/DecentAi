@@ -7,7 +7,7 @@ import { ScaleLoader } from "react-spinners";
 
 const ChatWindow = () => {
   const [loading, setLoading] = useState(false);
-  
+
   const {
     prompt,
     setPrompt,
@@ -69,6 +69,7 @@ const ChatWindow = () => {
 
   return (
     <div className="w-full h-screen flex flex-col">
+      {/* Navbar  */}
       <Navbar />
 
       <div className="w-full flex-1 flex justify-center overflow-hidden">

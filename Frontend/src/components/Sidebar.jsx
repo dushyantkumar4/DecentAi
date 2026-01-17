@@ -52,7 +52,6 @@ const Sidebar = () => {
       setPrevChat(response.data);
       setNewChat(false);
       setReply(null);
-      console.log(response);
     } catch (err) {
       console.log(err);
     }
@@ -76,8 +75,11 @@ const Sidebar = () => {
     }
   };
 
+  const truncateText = (text, limit = 25) =>
+    text.length > limit ? text.slice(0, limit) + "..." : text;
+
   return (
-    <section className=" md:flex flex-col w-80  justify-between  bg-[#171717] text-[#b4b4b4] ">
+    <section className="flex flex-col w-65 h-screen justify-between bg-[#171717] text-[#b4b4b4] ">
       <div className="flex flex-col w-full">
         {/* header  for new chat*/}
         <button
@@ -108,7 +110,7 @@ const Sidebar = () => {
                     : ""
                 }`}
               >
-                {thread.title}
+                {truncateText(thread.title, 25)}
                 <button
                   onClick={(e) => {
                     e.stopPropagation(); //it stops event bubbling
