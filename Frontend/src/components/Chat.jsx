@@ -5,7 +5,7 @@ import Markdown from "react-markdown";
 import "highlight.js/styles/github-dark.css";
 
 const Chat = () => {
-  const { newChat, prevChat, reply } = useContext(MyContaxt);
+  const { newChat, prevChat, reply,theme } = useContext(MyContaxt);
   const [latestReply, setLatestReply] = useState(null);
 
   useEffect(() => {
@@ -29,9 +29,9 @@ const Chat = () => {
   const safeMarkdown = (value) => (typeof value === "string" ? value : "");
 
   return (
-    <div className="w-full flex-1">
+    <div className={`w-full flex-1 ${theme?"text-white":"text-black"}`}>
       {newChat && (
-        <h1 className="text-3xl text-center font-bold mt-10 text-white text-shadow-md text-shadow-purple-600">
+        <h1 className={`text-3xl text-center font-bold mt-10  text-shadow-md text-shadow-purple-600 `}>
           Start a new Chat!
         </h1>
       )}
@@ -47,7 +47,7 @@ const Chat = () => {
             }`}
           >
             {chat.role === "user" ? (
-              <p className="bg-[#323232] py-2.5 px-5 rounded-xl max-w-120 w-fit mb-5">
+              <p className={` py-2.5 px-5 rounded-xl max-w-120 w-fit mb-5 ${theme?"bg-[#323232]":"bg-gray-100"}`}>
                 {safeMarkdown(chat.content)}
               </p>
             ) : (

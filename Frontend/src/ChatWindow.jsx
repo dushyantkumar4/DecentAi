@@ -16,6 +16,9 @@ const ChatWindow = () => {
     currThreadId,
     setPrevChat,
     setNewChat,
+    theme,
+    showSidebar,
+    setShowSidebar,
   } = useContext(MyContaxt);
 
   const getReply = async () => {
@@ -68,9 +71,20 @@ const ChatWindow = () => {
   }, [reply]);
 
   return (
-    <div className="w-full h-screen flex flex-col">
+    <div className={`w-full h-screen flex flex-col`}>
       {/* Navbar  */}
       <Navbar />
+      {!showSidebar && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowSidebar((prev) => !prev);
+          }}
+          className="absolute z-100 top-14 rounded p-1 shadow-lg hover:shadow-purple-600 hover:text-shadow-lg hover:text-shadow-purple-600"
+        >
+          <i class="fa-solid fa-chevron-right text-xl "></i>
+        </button>
+      )}
 
       <div className="w-full flex-1 flex justify-center overflow-hidden">
         <div className="flex-1 flex flex-col max-w-200 w-full overflow-y-auto">
@@ -80,12 +94,16 @@ const ChatWindow = () => {
           </div>
         </div>
       </div>
+      {/* botton section  */}
       <div className="flex flex-col items-center gap-0.5 mx-1">
-        <div className="flex justify-between items-center w-full rounded-2xl pr-6 max-w-200 shadow-md hover:shadow-purple-600 bg-[rgb(255,255,255,0.05)]">
+        {/* input window  */}
+        <div
+          className={`flex justify-between items-center w-full rounded-2xl pr-6 max-w-200 shadow-md hover:shadow-purple-600 ${theme ? "bg-[rgb(255,255,255,0.05)] text-white " : "bg-gray-100 text-black"}`}
+        >
           <input
             type="text"
             placeholder="Ask anything"
-            className="w-full outline-none p-5 text-white"
+            className="w-full outline-none p-5 "
             value={prompt}
             onChange={(e) => {
               setPrompt(e.target.value);
@@ -105,18 +123,15 @@ const ChatWindow = () => {
             }}
           >
             <i
-              className="fa-solid fa-paper-plane text-xl text-white cursor-pointer
-            hover:text-shadow-lg hover:text-shadow-purple-600 bg-[rgb(255,255,255,0.005)]"
+              className={`fa-solid fa-paper-plane text-xl  cursor-pointer
+            hover:text-shadow-lg hover:text-shadow-purple-600  ${theme ? "bg-[rgb(255,255,255,0.005)] text-white" : "text-black"}`}
             ></i>
           </button>
         </div>
+        {/* warning message  */}
         <p className="text-sm text-center p-1 ">
-          DecentAi can make mistakes. Check important{" "}
-          <u className="cursor-pointer text-white hover:text-purple-500">
-            info
-          </u>{" "}
-          . See &nbsp;
-          <u className="cursor-pointer text-white hover:text-purple-500">
+          DecentAi can make mistakes. Check important info . See &nbsp;
+          <u className="cursor-pointer  hover:text-purple-600">
             Cookie Preferences
           </u>{" "}
           .

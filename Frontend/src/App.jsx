@@ -1,16 +1,16 @@
-import React from "react";
+import {useContext} from "react";
 import "./App.css";
 import { RouterProvider } from "react-router-dom";
-import MyContextProvider from "./MyContextProvider";
+import { MyContaxt } from "./MyContaxt";
 import { router } from "./router";
 
 
+
 const App = () => {
+  const {theme} = useContext(MyContaxt);
   return (
-    <div className="font-sans text-[#ececec] bg-[#212121]">
-      <MyContextProvider>
+    <div className={`font-sans ${theme===true? "text-[#ececec] bg-[#212121]":"bg-white text-black"} `}>
         <RouterProvider router={router} />
-      </MyContextProvider>
     </div>
   );
 };
