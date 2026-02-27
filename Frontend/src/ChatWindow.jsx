@@ -82,7 +82,7 @@ const ChatWindow = () => {
           }}
           className="absolute z-100 top-14 rounded p-1 shadow-lg hover:shadow-purple-600 hover:text-shadow-lg hover:text-shadow-purple-600"
         >
-          <i class="fa-solid fa-chevron-right text-xl "></i>
+          <i className="fa-solid fa-chevron-right text-xl "></i>
         </button>
       )}
 
@@ -103,7 +103,7 @@ const ChatWindow = () => {
           <input
             type="text"
             placeholder="Ask anything"
-            className="w-full outline-none p-5 "
+            className={`w-full outline-none p-5 ${theme?"placeholder:text-gray-300":"placeholder:text-black/60"} `}
             value={prompt}
             onChange={(e) => {
               setPrompt(e.target.value);
