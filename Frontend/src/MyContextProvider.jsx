@@ -11,6 +11,8 @@ const MyContextProvider = ({ children }) => {
   const [allThreads,setAllThreads] = useState([]);
   const [showSidebar,setShowSidebar] = useState(true);
   const [theme,setTheme] = useState(true);
+  const [isLogin,setIsLogin] = useState(true);
+  const [register,setRegister] = useState(false);
   
 
   const providerValues = {
@@ -21,7 +23,9 @@ const MyContextProvider = ({ children }) => {
     newChat,setNewChat,
     allThreads,setAllThreads,
     showSidebar,setShowSidebar,
-    theme,setTheme
+    theme,setTheme,
+    isLogin,setIsLogin,
+    register,setRegister
   };
 
   return (

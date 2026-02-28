@@ -18,7 +18,7 @@ export const register = async (req, res) => {
       email,
       password: hasedPassword,
     });
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.role);
 
     res
       .cookie("token", token, cookieOptions)
@@ -40,7 +40,7 @@ export const login = async (req, res) => {
     if (!matchPass) {
       res.status(401).json({ message: "invalid password" });
     }
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.role);
     res
       .cookie("token", token, cookieOptions)
       .status(200)

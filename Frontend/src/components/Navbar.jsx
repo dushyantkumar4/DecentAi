@@ -4,7 +4,7 @@ import { MyContaxt } from "../MyContaxt";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { theme, setTheme } = useContext(MyContaxt);
+  const { theme, setTheme, isLogin, setIsLogin } = useContext(MyContaxt);
   const dropdownRef = useRef(null);
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -69,9 +69,21 @@ const Navbar = () => {
               <div className="menu-item">
                 <i className="fa-solid fa-cloud-arrow-up"></i> Upgrade plan
               </div>
-              <div className="menu-item">
-                <i className="fa-solid fa-arrow-right-from-bracket"></i> Log out
-              </div>
+              <button
+                className="menu-item w-full text-start"
+                onClick={() => setIsLogin((prev) => !prev)}
+              >
+                {isLogin ? (
+                  <div>
+                    <i className="fa-solid fa-arrow-right-from-bracket"></i> Log
+                    out
+                  </div>
+                ) : (
+                  <div>
+                    <i className="fa-solid fa-arrow-right-to-bracket"></i>&nbsp; Login
+                  </div>
+                )}
+              </button>
             </div>
           )}
         </div>
