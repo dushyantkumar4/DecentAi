@@ -11,10 +11,6 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <ChatWindow />,
-      },
-      {
-        path:"/login",
-        element:<Login />
       }
     ],
   },

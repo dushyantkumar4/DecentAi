@@ -1,8 +1,8 @@
 import { useContext, useEffect } from "react";
 import img from "../../public/logo.png";
 import { MyContaxt } from "../MyContaxt.jsx";
-import axios from "axios";
 import { v4 as uuidv1 } from "uuid";
+import { api } from "../api/client.js";
 
 const Sidebar = () => {
   const {
@@ -20,7 +20,7 @@ const Sidebar = () => {
 
   const getAllThread = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/thread");
+      const response = await api.get("/api/thread");
 
       const filteredData = response?.data?.map((thread) => ({
         threadId: thread.threadId,
@@ -48,9 +48,7 @@ const Sidebar = () => {
     setCurrThreadId(newThreadId);
 
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/thread/${newThreadId}`,
-      );
+      const response = await api.get(`/api/thread/${newThreadId}`);
       setPrevChat(response.data);
       setNewChat(false);
       setReply(null);
@@ -61,9 +59,7 @@ const Sidebar = () => {
 
   const deleteThread = async (threadId) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/thread/${threadId}`,
-      );
+      const response = await api.delete(`/api/thread/${threadId}`);
       console.log(response);
       //updating threads re-render
       setAllThreads((prev) =>

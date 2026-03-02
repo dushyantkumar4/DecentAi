@@ -5,7 +5,27 @@ const Login = () => {
   const { register, setRegister, theme } = useContext(MyContaxt);
   return (
     <>
-      <div className="flex justify-center items-center w-full mt-10">
+      <div className="flex flex-col justify-center items-center w-full mt-10">
+        <div className="mb-5">
+          Click here to{" "}
+          {register ? (
+            <button
+              onClick={() => setRegister(false)}
+              className="cursor-pointer hover:text-shadow-purple-600 hover:text-shadow-lg font-bold"
+            >
+              Login
+            </button>
+          ) : (
+            <button
+              onClick={() => setRegister(true)}
+              className="cursor-pointer hover:text-shadow-purple-600 hover:text-shadow-lg font-bold"
+            >
+              Signup
+            </button>
+          )}
+          &nbsp;
+          <i class="fa-solid fa-arrow-right-long"></i>{" "}
+        </div>
         <form
           action=""
           className="flex p-10 rounded-lg flex-col gap-10  shadow-lg shadow-purple-600 "
@@ -18,7 +38,7 @@ const Login = () => {
               <input
                 type="email"
                 className={`py-2 px-3 rounded border-2  ${theme ? "placeholder:text-gray-300" : "placeholder:text-black/60"} `}
-                placeholder="enter email"
+                placeholder="Enter email"
                 name="email"
               />
             </div>
@@ -33,7 +53,7 @@ const Login = () => {
             <input
               type="text"
               className={`py-2 px-3 rounded border-2  ${theme ? "placeholder:text-gray-300" : "placeholder:text-black/60"} `}
-              placeholder="enter name"
+              placeholder="Enter name"
               name="name"
             />
           </div>
@@ -44,32 +64,29 @@ const Login = () => {
             <input
               type="password"
               className={`py-2 px-3 rounded border-2  ${theme ? "placeholder:text-gray-300" : "placeholder:text-black/60"} `}
-              placeholder="enter password"
+              placeholder="Enter password"
               name="password"
             />
           </div>
           {/* Button section  */}
           <div className="flex gap-5">
-            <button
-              type="button"
-              className={`py-1.5 px-5 rounded-2xl font-semibold hover:shadow-md hover:shadow-purple-600 cursor-pointer shadow-md
+            {register ? (
+              <button
+                type="button"
+                className={`py-1.5 px-5 rounded-2xl font-semibold hover:shadow-md hover:shadow-purple-600 cursor-pointer shadow-md
             hover:text-shadow-lg hover:text-shadow-purple-600  ${theme ? "bg-white text-black " : " bg-gray-200 text-black"}`}
-              onClick={() => {
-                setRegister(true);
-              }}
-            >
-              Sign Up
-            </button>
-            <button
-              type="button"
-              className={`py-1.5 px-5 rounded-2xl font-semibold hover:shadow-md hover:shadow-purple-600 cursor-pointer shadow-md
+              >
+                Sign Up
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={`py-1.5 px-5 rounded-2xl font-semibold hover:shadow-md hover:shadow-purple-600 cursor-pointer shadow-md
             hover:text-shadow-lg hover:text-shadow-purple-600  ${theme ? "bg-white text-black " : " bg-gray-200 text-black"}`}
-              onClick={() => {
-                setRegister(false);
-              }}
-            >
-              Login
-            </button>
+              >
+                Login
+              </button>
+            )}
           </div>
         </form>
       </div>

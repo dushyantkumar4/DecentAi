@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from "react";
-import axios from "axios";
 import Chat from "./components/Chat.jsx";
 import { MyContaxt } from "./MyContaxt.jsx";
 import { ScaleLoader } from "react-spinners";
 import Login from "./components/Login.jsx";
+import { api } from "./api/client.js";
 
 const ChatWindow = () => {
   const [loading, setLoading] = useState(false);
@@ -29,17 +29,13 @@ const ChatWindow = () => {
     setNewChat(false);
 
     try {
-      const res = await axios({
-        url: "http://localhost:3000/api/chat",
-        method: "POST",
-        data: {
+      const res = await api.post(
+        "/api/chat",
+        {
           message: prompt,
           threadId: currThreadId,
         },
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      );
       console.log(res.data);
       setReply(res.data.reply);
     } catch (err) {
