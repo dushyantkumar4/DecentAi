@@ -1,4 +1,4 @@
-import { Thread } from "../models/Thread.js";
+import Thread from "../models/Thread.js";
 
 export const isOwner = async (req, res, next) => {
   try {

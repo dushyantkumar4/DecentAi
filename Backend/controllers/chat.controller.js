@@ -22,13 +22,20 @@ export const aiChat = async (req, res) => {
 
 export const getAllThread = async (req, res) => {
   try {
-    const threads = await Thread.find({}).sort({ updatedAt: -1 });
+    let threads;
+
+    if (req.user.role === "admin") {
+      threads = await Thread.find().sort({ updatedAt: -1 });
+    } else {
+      threads = await Thread.find({ user: req.user.id }).sort({
+        updatedAt: -1,
+      });
+    }
     // here .short updated at -1 shows recent update on top
     res.json(threads);
   } catch (err) {
-    console.log(err);
     res.status(500).json({
-      message: "unable to fetch ",
+      message: "unable to fetch threads",
     });
   }
 };
@@ -92,6 +99,7 @@ export const chat = async (req, res) => {
       //create new thread in db
       thread = new Thread({
         threadId,
+        user: req.user.id,
         title: message,
         messages: [{ role: "user", content: message }],
       });
@@ -107,7 +115,6 @@ export const chat = async (req, res) => {
     await thread.save();
 
     res.json({ reply: assistantReply });
-
   } catch (err) {
     console.log(err);
     res.status(500).json({

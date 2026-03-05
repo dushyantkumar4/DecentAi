@@ -16,26 +16,25 @@ const MessageSchema = new Schema({
   },
 });
 
-const ThreadSchema = new Schema({
-  threadId: {
-    type: String,
-    required: true,
-    unique: true,
+const ThreadSchema = new Schema(
+  {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    threadId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    title: {
+      type: String,
+      default: "New chat",
+    },
+    messages: [MessageSchema],
   },
-  title: {
-    type: String,
-    default: "New chat",
-  },
-  messages: [MessageSchema],
-
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true },
+);
 
 export default model("Thread", ThreadSchema);
