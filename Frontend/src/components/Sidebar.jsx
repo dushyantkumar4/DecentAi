@@ -1,7 +1,6 @@
 import { useContext, useEffect } from "react";
 import img from "../../public/logo.png";
 import { MyContaxt } from "../MyContaxt.jsx";
-import { v4 as uuidv1 } from "uuid";
 import { api } from "../api/client.js";
 
 const Sidebar = () => {
@@ -10,39 +9,31 @@ const Sidebar = () => {
     setAllThreads,
     currThreadId,
     setNewChat,
-    setPrompt,
     setReply,
     setCurrThreadId,
     setPrevChat,
     theme,
-    setShowSidebar,
+    setShowSidebar,getAllThread,createNewChat,
   } = useContext(MyContaxt);
 
-  const getAllThread = async () => {
-    try {
-      const response = await api.get("/api/thread");
+  // const getAllThread = async () => {
+  //   try {
+  //     const response = await api.get("/api/thread");
 
-      const filteredData = response?.data?.map((thread) => ({
-        threadId: thread.threadId,
-        title: thread.title,
-      }));
-      setAllThreads(filteredData);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //     const filteredData = response?.data?.map((thread) => ({
+  //       threadId: thread.threadId,
+  //       title: thread.title,
+  //     }));
+  //     setAllThreads(filteredData);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   useEffect(() => {
     getAllThread();
   }, [currThreadId]);
 
-  const createNewChat = () => {
-    setNewChat(true);
-    setPrompt("");
-    setReply(null);
-    setCurrThreadId(uuidv1());
-    setPrevChat([]);
-  };
 
   const changeThread = async (newThreadId) => {
     setCurrThreadId(newThreadId);
@@ -133,7 +124,7 @@ const Sidebar = () => {
                     deleteThread(thread.threadId);
                   }}
                 >
-                  <i className="fa-regular fa-trash-can text-purple-600 hover:text-[#f87171] hidden opacity-0 group-hover:opacity-100 transition-all duration-200"></i>
+                  <i className="fa-regular fa-trash-can cursor-pointer text-sm hover:text-[#f87171] transition-all duration-200"></i>
                 </button>
               </li>
             ))}

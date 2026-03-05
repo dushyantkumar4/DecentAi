@@ -17,6 +17,28 @@ const MyContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const createNewChat = () => {
+    setNewChat(true);
+    setPrompt("");
+    setReply(null);
+    setCurrThreadId(uuidv1());
+    setPrevChat([]);
+  };
+
+  const getAllThread = async () => {
+    try {
+      const response = await api.get("/api/thread");
+
+      const filteredData = response?.data?.map((thread) => ({
+        threadId: thread.threadId,
+        title: thread.title,
+      }));
+      setAllThreads(filteredData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const fetchUser = async () => {
     try {
       const { data } = await api.get("/api/me");
@@ -36,6 +58,7 @@ const MyContextProvider = ({ children }) => {
     try {
       await api.delete("/api/logout");
       setUser(null);
+      setAllThreads(null);
     } catch (err) {
       console.error("Logout failed", err);
     }
@@ -46,32 +69,22 @@ const MyContextProvider = ({ children }) => {
   }, []);
 
   const providerValues = {
-    prompt,
-    setPrompt,
-    reply,
-    setReply,
-    currThreadId,
-    setCurrThreadId,
-    prevChat,
-    setPrevChat,
-    newChat,
-    setNewChat,
-    allThreads,
-    setAllThreads,
-    showSidebar,
-    setShowSidebar,
-    theme,
-    setTheme,
-    isLogin,
-    setIsLogin,
-    register,
-    setRegister,
-    user,
-    setUser,
-    loading,
-    setLoading,
+    prompt,setPrompt,
+    reply,setReply,
+    currThreadId,setCurrThreadId,
+    prevChat,setPrevChat,
+    newChat,setNewChat,
+    allThreads,setAllThreads,
+    showSidebar,setShowSidebar,
+    theme,setTheme,
+    isLogin,setIsLogin,
+    register,setRegister,
+    user,setUser,
+    loading,setLoading,
     logout,
     fetchUser,
+    getAllThread,
+    createNewChat,
   };
 
   return (

@@ -12,14 +12,21 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const { register, setRegister, theme, fetchUser, user } =
-    useContext(MyContaxt);
+  const {
+    register,
+    setRegister,
+    theme,
+    fetchUser,
+    user,
+    getAllThread,
+    createNewChat,
+  } = useContext(MyContaxt);
   useEffect(() => {
     if (user) {
       navigate("/", { replace: true });
     }
   }, [user]);
-  
+
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -36,6 +43,8 @@ const Login = () => {
 
       // After success  fetch user profile
       await fetchUser();
+      await createNewChat();
+      await getAllThread();
       navigate("/");
     } catch (err) {
       console.error(err?.response?.data?.message || "Auth failed");
