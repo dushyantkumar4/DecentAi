@@ -1,5 +1,6 @@
 import { askGroq } from "../utils/openai.js";
 import Thread from "../models/Thread.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const aiChat = async (req, res) => {
   try {
@@ -20,105 +21,75 @@ export const aiChat = async (req, res) => {
   }
 };
 
-export const getAllThread = async (req, res) => {
-  try {
-    let threads;
+export const getAllThread = asyncHandler(async (req, res) => {
+  let threads;
 
-    if (req.user.role === "admin") {
-      threads = await Thread.find().sort({ updatedAt: -1 });
-    } else {
-      threads = await Thread.find({ user: req.user.id }).sort({
-        updatedAt: -1,
-      });
-    }
-    // here .short updated at -1 shows recent update on top
-    res.json(threads);
-  } catch (err) {
-    res.status(500).json({
-      message: "unable to fetch threads",
+  if (req.user.role === "admin") {
+    threads = await Thread.find().sort({ updatedAt: -1 });
+  } else {
+    threads = await Thread.find({ user: req.user.id }).sort({
+      updatedAt: -1,
     });
   }
-};
+  // here .short updated at -1 shows recent update on top
+  res.json(threads);
+});
 
-export const getThread = async (req, res) => {
+export const getThread = asyncHandler(async (req, res) => {
   const { threadId } = req.params;
 
-  try {
-    const thread = await Thread.findOne({ threadId });
+  const thread = await Thread.findOne({ threadId });
 
-    if (!thread) {
-      res.status(400).json({
-        error: "thread not found",
-      });
-    }
-
-    res.json(thread.messages);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: "unable to fetch chat",
-    });
+  if (!thread) {
+    res.status(404);
+    throw new Error("Thread not found");
   }
-};
 
-export const deleteThread = async (req, res) => {
+  res.json(thread.messages);
+});
+
+export const deleteThread = asyncHandler(async (req, res) => {
   const { threadId } = req.params;
 
-  try {
-    const deleteThread = await Thread.findOneAndDelete({ threadId });
+  const deleteThread = await Thread.findOneAndDelete({ threadId });
 
-    if (!deleteThread) {
-      res.status(400).json({
-        error: "thread not found",
-      });
-    }
-    res.status(200).json({
-      success: "chat deleted succefully",
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: "unable to delete chat",
-    });
+  if (!deleteThread) {
+    res.status(404);
+    throw new Error("Thread not found");
   }
-};
+  res.status(200).json({
+    success: "chat deleted succefully",
+  });
+});
 
-export const chat = async (req, res) => {
+export const chat = asyncHandler(async (req, res) => {
   const { threadId, message } = req.body;
 
   if (!threadId || !message) {
-    return res.status(400).json({
-      message: "missing require field",
-    });
+    res.status(400);
+    throw new Error("missing require field");
   }
 
-  try {
-    let thread = await Thread.findOne({ threadId });
+  let thread = await Thread.findOne({ threadId });
 
-    if (!thread) {
-      //create new thread in db
-      thread = new Thread({
-        threadId,
-        user: req.user.id,
-        title: message,
-        messages: [{ role: "user", content: message }],
-      });
-    } else {
-      thread.messages.push({ role: "user", content: message });
-    }
-
-    const assistantReply = await askGroq(message);
-
-    thread.messages.push({ role: "assistant", content: assistantReply });
-    thread.updatedAt = new Date();
-
-    await thread.save();
-
-    res.json({ reply: assistantReply });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: "something went wrong",
+  if (!thread) {
+    //create new thread in db
+    thread = new Thread({
+      threadId,
+      user: req.user.id,
+      title: message,
+      messages: [{ role: "user", content: message }],
     });
+  } else {
+    thread.messages.push({ role: "user", content: message });
   }
-};
+
+  const assistantReply = await askGroq(message);
+
+  thread.messages.push({ role: "assistant", content: assistantReply });
+  thread.updatedAt = new Date();
+
+  await thread.save();
+
+  res.json({ reply: assistantReply });
+});

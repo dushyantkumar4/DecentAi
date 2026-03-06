@@ -5,6 +5,7 @@ import chatRoutes from "./routes/chat.js";
 import authRoutes from "./routes/auth.route.js";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import { errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +21,8 @@ app.use(cookieParser());
 
 app.use("/api", authRoutes);
 app.use("/api", chatRoutes);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
